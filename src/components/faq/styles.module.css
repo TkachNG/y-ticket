@@ -1,0 +1,43 @@
+.container {
+  max-width: 116rem;
+  margin: 0 auto;
+  color: var(--text-primary, #1B1F23);
+  width: 100%;
+}
+
+.title {
+  background: var(--container-background, #FFFFFF);
+  padding: 1.5rem;
+  font-size: 2rem;
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+.questions {
+  margin-top: 1.5rem;
+}
+
+.item {
+  background: var(--container-background, #FFFFFF);
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.item + .item {
+  margin-top: 1rem;
+}
+
+.question {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.answer {
+  display: none;
+  line-height: 1.5rem;
+  font-size: 1rem;
+  font-weight: 400;
+  margin-top: 1rem;
+}

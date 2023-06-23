@@ -1,7 +1,59 @@
 import './globals.css'
-import { Inter } from 'next/font/google'
+import { Roboto } from 'next/font/google'
+import localFont from 'next/font/local'
+import { Header } from '../components/header/Header';
+import { Footer } from '../components/footer/Footer';
+import cl from 'classnames';
+import { Provider } from 'react-redux';
+import { StoreProvider } from '@/redux/StoreProvider.jsx'
 
-const inter = Inter({ subsets: ['latin'] })
+const roboto = Roboto({ subsets: ['latin'], weight: ['400', '500', '700'], style: 'normal' });
+const robotoItalic = Roboto({ subsets: ['latin'], weight: ['400'], style: 'italic' });
+
+const SFPro = localFont({
+  src: [
+    {
+      path: '../../public/fonts/SFProDisplay-Medium.woff',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/SFProDisplay-Medium.woff2',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/SFProDisplay-Regular.woff',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/SFProDisplay-Regular.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/SFProDisplay-RegularItalic.woff',
+      weight: '400',
+      style: 'italic',
+    },
+    {
+      path: '../../public/fonts/SFProDisplay-RegularItalic.woff2',
+      weight: '400',
+      style: 'italic',
+    },
+    {
+      path: '../../public/fonts/SFProDisplay-Semibold.woff',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/SFProDisplay-Semibold.woff2',
+      weight: '600',
+      style: 'normal',
+    },
+  ]
+});
 
 export const metadata = {
   title: 'Create Next App',
@@ -15,7 +67,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={cl(roboto.className)}>
+        <StoreProvider>
+          <div className='container'>
+            <Header />
+            <main className='main'>
+              {children}
+            </main>
+            <Footer />
+          </div>
+        </StoreProvider>
+      </body>
     </html>
   )
 }

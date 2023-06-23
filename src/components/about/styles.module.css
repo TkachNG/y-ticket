@@ -1,0 +1,22 @@
+.container {
+  background: var(--container-background, #FFFFFF);
+  padding: 1.5rem;
+  max-width: 116rem;
+  border-radius: 8px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-primary, #1B1F23);
+}
+
+.about {
+  line-height: 1.5;
+  margin-top: 1rem;
+  font-weight: 400;
+}
+
+.about p + p {
+  margin-top: 1rem;
+}
