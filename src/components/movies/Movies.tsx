@@ -1,7 +1,7 @@
 'use client'
 
 import { Filter } from "./Filter";
-import { FunctionComponent, useCallback, useMemo } from "react";
+import { useMemo } from "react";
 import { MovieItem } from "@/components/movies/MovieItem";
 import cl from "classnames";
 import styles from './movies.module.css'
@@ -24,24 +24,17 @@ export const Movies = () => {
 
   const { data, isLoading, error } = useGetMoviesQuery(cinema);
 
-  console.log('cinema', cinema, '//');
-
-
-  const filterMovies = (name, genre, data) => {
+  const filteredMovies = useMemo(() => {
     if ((name || genre) && data && data.length) {
       return data.filter((item) => {
         let filtered = true;
         if (genre) filtered = filtered && item.genre == genre;
-        if (name) filtered = filtered && item.title.toLowerCase().indexOf(name.toLowerCase());
+        if (name) filtered = filtered && item.title.toLowerCase().indexOf(name.toLowerCase()) !== -1;
         return filtered
       });
     }
     return data;
-  };
-
-  const filteredMovies = useMemo(() => {
-    return filterMovies(name, genre, data);
-  }, [name, genre, data, filterMovies]);
+  }, [name, genre, data]);
 
   if (error) {
     return <div className={cl(styles.container)}>
@@ -51,11 +44,14 @@ export const Movies = () => {
   }
 
   return (<div className={cl(styles.container)}>
-    <Filter/>
-    <div>
+    <div className={cl(styles.filter)}>
+      <Filter />
+    </div>
+
+    <div className={cl(styles.movies)}>
       {
         isLoading ? <div className={cl(styles.container)}>Loading...</div> :
-          Boolean(filteredMovies) ? filteredMovies.map((movie: Movie) => {
+          filteredMovies.length ? filteredMovies.map((movie: Movie) => {
             return (<MovieItem key={movie.id} movie={movie} className={styles.movie}/>)
           }) : ''
       }

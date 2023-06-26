@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+  max-width: 120rem;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.filter {
+  width: 25%;
+}
+
+.movies {
+  margin-left: 1.44rem;
+  width: 100%;
+}
+
+.movie + .movie {
+  margin-top: 1rem;
+}

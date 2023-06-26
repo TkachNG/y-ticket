@@ -1,11 +1,5 @@
-import Image from 'next/image'
-import styles from './page.module.css'
-import Film from './Film'
+import { Movies } from '@/components/movies/Movies'
 
 export default function Home() {
-  return (
-    <main className={styles.main}>
-      <Film />
-    </main>
-  )
+  return (<Movies/>)
 }

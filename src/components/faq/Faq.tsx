@@ -1,7 +1,5 @@
-import styles from './styles.module.css'
-import { FunctionComponent } from 'react';
 import cl from 'classnames';
-
+import styles from './styles.module.css'
 
 const questions = [
   {
@@ -34,9 +32,9 @@ export const Faq = () => {
       <div className={cl(styles.questions)}>
         {questions.map(question => {
           return (<div className={cl(styles.item)} key={question.id}>
-            <p className={cl(styles.question)}>{question.question}</p>
-            <p className={cl(styles.answer)}>{question.answer}</p>
-          </div>
+              <p className={cl(styles.question)}>{question.question}</p>
+              <p className={cl(styles.answer)}>{question.answer}</p>
+            </div>
           )
         })}
       </div>

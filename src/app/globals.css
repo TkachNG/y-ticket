@@ -4,6 +4,11 @@
   --text-primary: #1B1F23;
   --container-background: #FFFFFF;
   --primary: #FF5500;
+  --orange-disabled: #FFA375;
+  --gray-5: #E0E0E0;
+  --border-default: #E1E3E6;
+  --text-tertiary: #999FA6;
+
   font-size: 16px;
 }
 
@@ -116,10 +121,10 @@ h6 {
 
 @media (prefers-reduced-motion: reduce) {
   * {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
@@ -135,5 +140,7 @@ h6 {
 .main {
   align-self: baseline;
   width: 100%;
+  height: 100%;
   padding: 1.5rem 2rem;
+  /*background: var(--gray-background);*/
 }

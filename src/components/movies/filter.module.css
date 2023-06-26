@@ -1,0 +1,63 @@
+.filter {
+  background: var(--container-background, #FFFFFF);
+  padding: 1.5rem;
+  border-radius: 8px;
+  top: 6.8rem;
+  height: calc(100vh - 7.5rem - 5.25rem);
+  position: sticky;
+}
+
+.filterInner {
+
+}
+
+.title {
+  color: var(--text-primary, #1B1F23);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+}
+
+.filters {
+  margin-top: 1.25rem;
+}
+
+.filterLabel {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  display: block;
+}
+
+.input {
+  margin-top: 0.25rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-default, #E1E3E6);
+  background: var(--container-background, #FFF);
+  padding: 0.62rem 1rem;
+  width: 100%;
+}
+
+.input::placeholder {
+  color: var(--text-tertiary, #999FA6);
+}
+
+.input:focus {
+  border: 1px solid var(--primary, #F50);
+}
+
+.input:focus::placeholder {
+  color: var(--text-primary, #1B1F23);
+}
+
+.filterItem + .filterItem {
+  margin-top: 1rem;
+}
+
+.select {
+  margin-top: 0.25rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-default, #E1E3E6);
+  background: var(--container-background, #FFF);
+  padding: 0.62rem 1rem;
+  width: 100%;
+}

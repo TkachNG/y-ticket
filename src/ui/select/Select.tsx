@@ -1,15 +1,13 @@
 'use client'
 
-import { FunctionComponent, useEffect, useRef, useState } from "react";
-import styles from './styles.module.css'
+import { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Input } from "@/ui/input/Input";
-import cl from "classnames";
 import { createPortal } from "react-dom";
-import { SFPro } from "@/app/fonts";
-import { it } from "node:test";
-import {
-  validateLocalFontFunctionCall
-} from "next/dist/compiled/@next/font/dist/local/validate-local-font-function-call";
+import { SelectItems } from "@/ui/select/SelectItems";
+import { useSelectClickOutside } from "../../../hooks/useSelectClickOutside";
+
+import styles from './styles.module.css'
+import cl from "classnames";
 
 interface Props {
 
@@ -28,11 +26,38 @@ export const Select: FunctionComponent<Props> =
      className,
      setValue
    }) => {
-    const select = useRef(null);
-    const selectItems = useRef(null);
+    const selectRef = useRef(null);
+    const selectItemsRef = useRef(null);
 
     const [selectVisible, updateSelectVisible] = useState(false);
-    const [selectedValue, setSelectedValue] = useState('');
+    const [searchText, setSearchText] = useState('');
+    const [prevSearchText, setPrevSearchText] = useState('');
+
+    const isValueInVariants = useCallback((searchText) => {
+      return Object.values(variants).includes(searchText);
+    }, []);
+
+    useSelectClickOutside(selectRef, selectItemsRef, () => {
+      if (!isValueInVariants(searchText) && isValueInVariants(prevSearchText)) {
+        setSearchText(prevSearchText);
+      }
+      updateSelectVisible(false);
+      if (!searchText) setValue('');
+    });
+
+    const filteredVariants = useMemo(() => {
+      const asArray = Object.entries(variants);
+      const filtered = asArray.filter(([, value]) => {
+        return value.toLowerCase().indexOf(searchText.toLowerCase()) !== -1
+      });
+      return Object.fromEntries(filtered);
+    }, [searchText, variants])
+
+    const selectValue = (item) => {
+      setSearchText(variants[item]);
+      updateSelectVisible(false);
+      setValue(item);
+    }
 
     useEffect(() => {
       const hideScroll = () => updateSelectVisible(false);
@@ -40,49 +65,40 @@ export const Select: FunctionComponent<Props> =
       window.addEventListener("resize", hideScroll);
     }, []);
 
-    useEffect(() => {
-      console.log(selectItems.current.addEventListener('click', () => {
-        // setValue(item);
-        // setSelectedValue(variants[item]);
-      }));
-
-
-    }, [selectItems.current])
-
     const showSelect = () => {
-      if (!selectItems.current) return;
-      const rect = select.current?.getBoundingClientRect();
-      selectItems.current.style.top = rect.y + rect.height + window.scrollY + 'px';
-      selectItems.current.style.left = rect.x + 'px';
-      selectItems.current.style.width = rect.width + 'px';
+      const isVariant = isValueInVariants(searchText);
+
+      if (isVariant) {
+        setPrevSearchText(searchText);
+        setSearchText('');
+      }
+
+      if (!selectItemsRef.current) return;
+      const rect = selectRef.current?.getBoundingClientRect();
+      selectItemsRef.current.style.top = rect.y + rect.height + window.scrollY + 'px';
+      selectItemsRef.current.style.left = rect.x + 'px';
+      selectItemsRef.current.style.width = rect.width + 'px';
       updateSelectVisible(true);
     }
 
     return (
-      <div className={cl(styles.select, className)} ref={select}>
-        <Input title={title} placeholder={placeholder} className={className} setValue={setValue} value={selectedValue}
-               onFocus={showSelect}
-               onBlur={() => updateSelectVisible(false)}
-        />
-
-        {createPortal(
-          <div className={cl(styles.selectItems)} ref={selectItems}
-               style={{ display: selectVisible ? 'block' : 'none' }}> {
-            (Object.keys(variants)).map((item) => {
-              return (
-                <div key={item} className={cl(styles.selectItem, SFPro.className)} onClick={() => {
-                  console.log(333);
-                  selectValue(item);
-                }}>
-                  <p className={cl(styles.selectText)} onClick={() => {
-                    console.log(333);
-                    selectValue(item);
-                  }}>{variants[item]}</p>
-                </div>
-              )
-            })
-          }
-          </div>, document.body)
+      <div className={cl(styles.select, className)} ref={selectRef}>
+        <Input title={title} placeholder={placeholder}
+               className={className}
+               setValue={(text) => {
+                 setSearchText(text);
+               }}
+               value={searchText}
+               onFocus={showSelect}/>
+        {
+          createPortal(
+            <SelectItems variants={filteredVariants}
+                         selectItemsRef={selectItemsRef}
+                         selectVisible={selectVisible}
+                         selectValue={selectValue}
+            />,
+            document.body
+          )
         }
       </div>
     )

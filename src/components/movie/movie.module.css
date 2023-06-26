@@ -1,0 +1,75 @@
+.container {
+  display: grid;
+  grid-column-gap: 2rem;
+  grid-template-columns: minmax(auto, 35%) auto;
+
+  max-width: 120rem;
+  margin: 0 auto;
+  background-color: var(--container-background);
+  padding: 1.5rem;
+  border-radius: 8px;
+  color: var(--text-primary, #1B1F23);
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.image {
+  max-width: 25rem;
+  max-height: 31.25rem;
+  border-radius: 8px;
+  object-fit: cover;
+  width: 100%;
+  height: auto;
+
+  aspect-ratio: 400 / 500;
+}
+
+.movie + .movie {
+  margin-top: 1rem;
+}
+
+.infoTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 2rem;
+}
+
+.infoTable {
+  margin-top: 1.5rem;
+}
+
+.infoItem {
+  font-size: 1.25rem;
+}
+
+.infoItemBold {
+  font-weight: 700;
+}
+
+.infoItem + .infoItem {
+  margin-top: 1rem;
+}
+
+.description {
+  margin-top: 2rem;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 2rem;
+}
+
+.descriptionText {
+  margin-top: 1rem;
+}
+
+.reviews {
+  margin-top: 1.5rem;
+}
