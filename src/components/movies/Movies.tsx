@@ -1,7 +1,7 @@
 'use client'
 
 import { Filter } from "./Filter";
-import { useMemo } from "react";
+import { FunctionComponent, useMemo } from "react";
 import { MovieItem } from "@/components/movies/MovieItem";
 import cl from "classnames";
 import styles from './movies.module.css'
@@ -17,16 +17,19 @@ export interface Movie {
   posterUrl: string,
 }
 
-export const Movies = () => {
+export const Movies: FunctionComponent = () => {
+
   const name = useSelector((state: StoreState) => getName(state));
   const genre = useSelector((state: StoreState) => getGenre(state));
   const cinema = useSelector((state: StoreState) => getCinema(state));
 
   const { data, isLoading, error } = useGetMoviesQuery(cinema);
 
+
+
   const filteredMovies = useMemo(() => {
     if ((name || genre) && data && data.length) {
-      return data.filter((item) => {
+      return data.filter((item: Movie) => {
         let filtered = true;
         if (genre) filtered = filtered && item.genre == genre;
         if (name) filtered = filtered && item.title.toLowerCase().indexOf(name.toLowerCase()) !== -1;
@@ -53,7 +56,7 @@ export const Movies = () => {
         isLoading ? <div className={cl(styles.container)}>Loading...</div> :
           filteredMovies.length ? filteredMovies.map((movie: Movie) => {
             return (<MovieItem key={movie.id} movie={movie} className={styles.movie}/>)
-          }) : ''
+          }) : <p>Фильмы не найдены</p>
       }
     </div>
   </div>)

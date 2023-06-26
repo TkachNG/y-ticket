@@ -31,7 +31,7 @@ export const Cart = () => {
 
   return (
     <div className={cl(styles.container)}>
-      {!Boolean(cartIds.length) && <h1>В корзине нет товаров</h1>}
+      {!cartIds.length ? <h1>В корзине нет товаров</h1> : ''}
       <div>
         {cartIds.map((movieId) => {
           return (<CartItem key={movieId} movieId={movieId}/>)

@@ -1,8 +1,8 @@
 'use client'
 
-import { ChangeEvent, FunctionComponent, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, FunctionComponent, ReactNode, useCallback, useEffect, useState } from "react";
 
-import { SFPro } from "@/app/fonts";
+import { SFPro } from "@/components/fonts";
 import cl from "classnames";
 import styles from './styles.module.css'
 import { useDebounce } from "../../../hooks/useDebounnce";
@@ -13,39 +13,43 @@ interface Props {
 
   value?: string,
   className: string,
+  inputClassName?: string,
   setValue: (name: string) => void
   onFocus?: () => void
-  onBlur?: () => void
+  onBlur?: () => void,
+
+  children?: ReactNode
 }
 
-export const Input: FunctionComponent<Props> = ({ title, value, placeholder, className, setValue, onFocus, onBlur }) => {
-  const [inputText, setSearchTerm] = useState('');
-  const debouncedSearchTerm = useDebounce(inputText, 500);
+export const Input: FunctionComponent<Props> = ({ title, value, placeholder, className, inputClassName, setValue, onFocus, onBlur, children }) => {
+  const [inputText, setSearchText] = useState('');
+  const debouncedSearchTerm = useDebounce(inputText, 100);
 
   useEffect(() => {
-    setSearchTerm(value || '');
+    setSearchText(value || '');
   }, [value])
 
-  const setValueStable = useCallback((value: string) => {
-    setValue(value)
+  const setValueStable = useCallback((text: string) => {
+    setValue(text || '')
   }, []);
 
   useEffect(() => {
     return setValueStable(debouncedSearchTerm);
-  }, [debouncedSearchTerm]);
+  }, [debouncedSearchTerm, setValueStable]);
 
   const handleChange = (event: ChangeEvent) => {
     if (!('value' in event.target)) {
       return;
     }
-    setSearchTerm(event.target.value);
+    setSearchText(event.target.value as string);
   };
 
   return (
-    <div className={cl(className)}>
+    <div className={cl(className, styles.container)}>
       <label className={cl(styles.inputLabel, SFPro.className)}>{title}</label>
-      <input type="text" placeholder={placeholder} className={cl(styles.input)} onFocus={onFocus} onBlur={onBlur}
+      <input type="text" placeholder={placeholder} className={cl(styles.input, inputClassName)} onFocus={onFocus} onBlur={onBlur}
              value={inputText} onChange={handleChange}/>
+      {children}
     </div>
   )
 }

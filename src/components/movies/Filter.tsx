@@ -1,6 +1,4 @@
-'use client'
-
-import { useCallback, useMemo } from "react";
+import { FunctionComponent, useCallback, useMemo } from "react";
 
 import { useGetCinemasQuery } from "@/redux/services/movieApi";
 import { filterActions } from "@/redux/features/moviesFilter";
@@ -13,26 +11,32 @@ import styles from './filter.module.css'
 import cl from "classnames";
 
 
-export const Filter = () => {
+export interface Cinema {
+  id: string,
+  name: string,
+}
+
+export const Filter: FunctionComponent = () => {
 
   const dispatch = useDispatch();
 
-  const setName = useCallback((name: string) => dispatch(filterActions.setName(name)), []);
-  const setGenre = useCallback((name: string) => dispatch(filterActions.setGenre(name)), []);
+  const setName = useCallback((name: string) => dispatch(filterActions.setName(name)), [dispatch]);
+  const setGenre = useCallback((name: string) => dispatch(filterActions.setGenre(name)), [dispatch]);
   const setCinema = useCallback((name: string) => {
     dispatch(filterActions.setCinema(name));
-  }, []);
+  }, [dispatch]);
 
-  const { data, isLoading, } = useGetCinemasQuery();
+  const { data } = useGetCinemasQuery({});
 
   const cinemasMap = useMemo((): Record<string, string> => {
-    const result = [] as Record<string, string>;
-    if (!data) return result;
+    if (!data) return {} as Record<string, string>;
+    const result: Record<string, string> = {};
+
     for (const cinema of data) {
-      result[cinema.id] = cinema.name;
+      result[cinema.id as string] = cinema.name as string;
     }
-    return result;
-  }, [data, isLoading]);
+    return result as Record<string, string>;
+  }, [data]);
 
   return (
     <div className={cl(styles.filter)}>

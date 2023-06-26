@@ -1,20 +1,25 @@
 'use client'
 
-import { FunctionComponent, Ref, useEffect, useRef, useState } from "react";
+import { FunctionComponent, LegacyRef, Ref } from "react";
 import styles from './styles.module.css'
 import cl from "classnames";
-import { SFPro } from "@/app/fonts";
+import { SFPro } from "@/components/fonts";
 
 interface Props {
   variants: Record<string, string>
-  selectItemsRef: Ref<any>,
+  selectItemsRef: LegacyRef<HTMLDivElement>,
 
   selectVisible: boolean,
-  selectValue: (string) => void
+  selectValue: (item: string) => void
 }
 
 export const SelectItems: FunctionComponent<Props> =
-  ({ variants, selectItemsRef, selectVisible, selectValue }) => {
+  ({
+     variants,
+     selectItemsRef,
+     selectVisible,
+     selectValue
+   }) => {
     return (<div className={cl(styles.selectItems)} ref={selectItemsRef}
                  style={{ display: selectVisible ? 'block' : 'none' }}> {
       (Object.keys(variants)).map((item) => {
@@ -24,5 +29,6 @@ export const SelectItems: FunctionComponent<Props> =
           <p className={cl(styles.selectText)}>{variants[item]}</p>
         </div>)
       })
-    }</div>);
+    }
+    </div>);
   }

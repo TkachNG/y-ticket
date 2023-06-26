@@ -15,6 +15,8 @@
 .amount {
   color: var(--text-primary, #1B1F23);
   font-weight: 700;
+  line-height: 1;
+  font-size: 1.25rem;
 }
 
 .button {

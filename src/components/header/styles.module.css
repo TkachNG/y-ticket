@@ -1,6 +1,5 @@
 .header {
   position: sticky;
-  padding: 1.5rem 2rem;
   background: var(--gray-1, #333);
   color: #FFFFFF;
   width: 100%;
@@ -9,6 +8,7 @@
 }
 
 .container {
+  padding: 1.5rem 2rem;
   max-width: 120rem;
   margin: 0 auto;
   display: flex;

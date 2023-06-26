@@ -1,13 +1,11 @@
-'use client'
-
-import { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FunctionComponent, LegacyRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Input } from "@/ui/input/Input";
 import { createPortal } from "react-dom";
 import { SelectItems } from "@/ui/select/SelectItems";
 import { useSelectClickOutside } from "../../../hooks/useSelectClickOutside";
-
 import styles from './styles.module.css'
 import cl from "classnames";
+import { SelectArrow } from "@/ui/select/SelectArrow";
 
 interface Props {
 
@@ -26,23 +24,24 @@ export const Select: FunctionComponent<Props> =
      className,
      setValue
    }) => {
-    const selectRef = useRef(null);
-    const selectItemsRef = useRef(null);
+    const selectRef: LegacyRef<HTMLDivElement> = useRef(null);
+    const selectItemsRef: LegacyRef<HTMLDivElement> = useRef(null);
 
     const [selectVisible, updateSelectVisible] = useState(false);
     const [searchText, setSearchText] = useState('');
     const [prevSearchText, setPrevSearchText] = useState('');
 
-    const isValueInVariants = useCallback((searchText) => {
+    const isValueInVariants = useCallback((searchText: string) => {
       return Object.values(variants).includes(searchText);
-    }, []);
+    }, [variants]);
 
     useSelectClickOutside(selectRef, selectItemsRef, () => {
-      if (!isValueInVariants(searchText) && isValueInVariants(prevSearchText)) {
+      if (!selectVisible) return;
+      if (!isValueInVariants(searchText) && (!prevSearchText || isValueInVariants(prevSearchText))) {
         setSearchText(prevSearchText);
+        setPrevSearchText('');
       }
       updateSelectVisible(false);
-      if (!searchText) setValue('');
     });
 
     const filteredVariants = useMemo(() => {
@@ -53,27 +52,25 @@ export const Select: FunctionComponent<Props> =
       return Object.fromEntries(filtered);
     }, [searchText, variants])
 
-    const selectValue = (item) => {
-      setSearchText(variants[item]);
-      updateSelectVisible(false);
-      setValue(item);
-    }
-
     useEffect(() => {
       const hideScroll = () => updateSelectVisible(false);
       document.body.addEventListener("scroll", hideScroll);
       window.addEventListener("resize", hideScroll);
     }, []);
 
-    const showSelect = () => {
-      const isVariant = isValueInVariants(searchText);
+    const selectValue = (item: string) => {
+      setSearchText(variants[item]);
+      updateSelectVisible(false);
+      setValue(item);
+    }
 
-      if (isVariant) {
+    const showSelect = () => {
+      if (isValueInVariants(searchText)) {
         setPrevSearchText(searchText);
         setSearchText('');
       }
 
-      if (!selectItemsRef.current) return;
+      if (!selectItemsRef.current || !selectRef.current) return;
       const rect = selectRef.current?.getBoundingClientRect();
       selectItemsRef.current.style.top = rect.y + rect.height + window.scrollY + 'px';
       selectItemsRef.current.style.left = rect.x + 'px';
@@ -82,16 +79,19 @@ export const Select: FunctionComponent<Props> =
     }
 
     return (
-      <div className={cl(styles.select, className)} ref={selectRef}>
-        <Input title={title} placeholder={placeholder}
-               className={className}
+      <div className={cl(className)} ref={selectRef}>
+        <Input title={title} placeholder={placeholder} className={className}
                setValue={(text) => {
                  setSearchText(text);
                }}
+               inputClassName={styles.inputSelect}
                value={searchText}
-               onFocus={showSelect}/>
+               onFocus={showSelect}>
+
+          <SelectArrow className={styles.inputArrow} arrowClassName={selectVisible ? styles.arrowReversed : ''}/>
+        </Input>
         {
-          createPortal(
+          Boolean(Object.keys(filteredVariants).length) && typeof window === "object" && createPortal(
             <SelectItems variants={filteredVariants}
                          selectItemsRef={selectItemsRef}
                          selectVisible={selectVisible}

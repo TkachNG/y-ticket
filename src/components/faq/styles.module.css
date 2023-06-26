@@ -1,5 +1,5 @@
 .container {
-  max-width: 116rem;
+  max-width: calc(120rem - 4rem);
   margin: 0 auto;
   color: var(--text-primary, #1B1F23);
   width: 100%;
@@ -21,6 +21,7 @@
   background: var(--container-background, #FFFFFF);
   padding: 1.5rem;
   border-radius: 8px;
+  cursor: pointer;
 }
 
 .item + .item {
@@ -31,13 +32,26 @@
   font-size: 1.5rem;
   line-height: 2rem;
   font-weight: 600;
-  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .answer {
-  display: none;
   line-height: 1.5rem;
   font-size: 1rem;
   font-weight: 400;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  height: auto;
+}
+
+.answerExpanded {
   margin-top: 1rem;
+  height: auto;
+  max-height: 1000px;
+}
+
+.arrowReversed {
+  transform: translateY(100%) rotateX(-180deg);
 }

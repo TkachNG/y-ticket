@@ -1,7 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
-import { Movie } from "@/components/movie/Movie";
-
 export const movieApi = createApi({
   reducerPath: "movieApi",
   baseQuery: fetchBaseQuery({
@@ -11,11 +9,11 @@ export const movieApi = createApi({
     getCinemas: builder.query({ query: () => "cinemas" }),
     getMovies: builder.query({
       query: (cinemaId = null) => {
-        return "movies" + (Boolean(cinemaId) ? `?cinemaId=${cinemaId}` : '');
+        return "movies" + (cinemaId ? `?cinemaId=${ cinemaId }` : '');
       }
     }),
-    getMovie: builder.query<Movie, string>({ query: (movieId) => `movie?movieId=${movieId}` }),
-    getReviews: builder.query({ query: (movieId) => `reviews?movieId=${movieId}` }),
+    getMovie: builder.query({ query: (movieId) => `movie?movieId=${ movieId }` }),
+    getReviews: builder.query({ query: (movieId) => `reviews?movieId=${ movieId }` }),
   })
 });
 

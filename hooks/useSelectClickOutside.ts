@@ -1,15 +1,19 @@
-import { useEffect } from "react";
+import { RefObject, useCallback, useEffect } from "react";
 
-export const useSelectClickOutside = (selectRef, selectItemsRef, callback): void => {
+export const useSelectClickOutside = (
+  selectRef: RefObject<HTMLElement>,
+  selectItemsRef: RefObject<HTMLElement>,
+  callback: () => void
+): void => {
 
-  const handleClick = (event) => {
+  const handleClick = useCallback((event: Event) => {
     if (
-      selectRef.current && !selectRef.current.contains(event.target) &&
-      selectItemsRef.current && !selectItemsRef.current.contains(event.target)
+      selectRef.current && !selectRef.current.contains(event.target as Node) &&
+      selectItemsRef.current && !selectItemsRef.current.contains(event.target as Node)
     ) {
       callback();
     }
-  };
+  }, [callback, selectItemsRef, selectRef]);
 
   useEffect(() => {
     document.addEventListener('click', handleClick);
@@ -17,5 +21,5 @@ export const useSelectClickOutside = (selectRef, selectItemsRef, callback): void
     return () => {
       document.removeEventListener('click', handleClick);
     };
-  }, []);
+  }, [handleClick]);
 };

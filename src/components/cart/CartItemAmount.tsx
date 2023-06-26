@@ -1,4 +1,4 @@
-import { FunctionComponent, useCallback, useState } from "react";
+import { FunctionComponent, useCallback, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreState } from "@/redux/store";
 import { cartActions } from "@/redux/features/cart";
@@ -6,6 +6,9 @@ import cl from "classnames";
 import { createPortal } from "react-dom";
 import { selectProductAmount } from "@/redux/features/cart/selector";
 import styles from './cartItemAmount.module.css'
+import { PlusIcon } from "@/components/cart/PlusIcon";
+import { MinusIcon } from "@/components/cart/MinusIcon";
+import { useModalClickOutside } from "../../../hooks/useModalClickOutside";
 
 interface Props {
   productId: string,
@@ -18,9 +21,15 @@ interface ResetModalProps {
 }
 
 const ResetModal: FunctionComponent<ResetModalProps> = ({ submit, cancel }) => {
+  const modalRef = useRef(null);
+
+  useModalClickOutside(modalRef, () => {
+    cancel();
+  });
+
   return (
     <div className={styles.overlay}>
-      <div className={styles.modal}>
+      <div className={styles.modal} ref={modalRef}>
         <div className={styles.modalTop}>
           <h3 className={styles.modalTitle}>Удаление билета</h3>
           <span className={styles.modalClose} onClick={() => cancel()}></span>
@@ -45,11 +54,11 @@ export const CartItemAmount: FunctionComponent<Props> = ({ productId, canReset =
     return selectProductAmount(state, productId)
   });
 
-  const decrement = useCallback(() => dispatch(cartActions.decrement(productId)), [])
-  const increment = useCallback(() => dispatch(cartActions.increment(productId)), [])
-  const reset = useCallback(() => dispatch(cartActions.reset(productId)), [])
-
   const dispatch = useDispatch();
+
+  const decrement = useCallback(() => dispatch(cartActions.decrement(productId)), [dispatch, productId])
+  const increment = useCallback(() => dispatch(cartActions.increment(productId)), [dispatch, productId])
+  const reset = useCallback(() => dispatch(cartActions.reset(productId)), [dispatch, productId])
 
   return (
     <div className={cl(styles.container)}>
@@ -58,21 +67,12 @@ export const CartItemAmount: FunctionComponent<Props> = ({ productId, canReset =
                 onClick={() => {
                   return productAmount > 1 ? decrement() : setIsResetModalOpen(true)
                 }}>
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M10.5 6C10.5 6.09946 10.4605 6.19484 10.3902 6.26517C10.3198 6.33549 10.2245 6.375 10.125 6.375H1.875C1.77554 6.375 1.68016 6.33549 1.60984 6.26517C1.53951 6.19484 1.5 6.09946 1.5 6C1.5 5.90054 1.53951 5.80516 1.60984 5.73484C1.68016 5.66451 1.77554 5.625 1.875 5.625H10.125C10.2245 5.625 10.3198 5.66451 10.3902 5.73484C10.4605 5.80516 10.5 5.90054 10.5 6Z"
-              fill="white"/>
-          </svg>
-
+          <MinusIcon/>
         </button>
         <span className={cl(styles.amount)}>{productAmount}</span>
         <button className={cl(styles.button, { [styles['button--inactive']]: productAmount >= 30 })}
                 onClick={increment}>
-          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M9.5 5C9.5 5.09946 9.46049 5.19484 9.39017 5.26517C9.31984 5.33549 9.22446 5.375 9.125 5.375H5.375V9.125C5.375 9.22446 5.33549 9.31984 5.26517 9.39017C5.19484 9.46049 5.09946 9.5 5 9.5C4.90054 9.5 4.80516 9.46049 4.73484 9.39017C4.66451 9.31984 4.625 9.22446 4.625 9.125V5.375H0.875C0.775544 5.375 0.680161 5.33549 0.609835 5.26517C0.539509 5.19484 0.5 5.09946 0.5 5C0.5 4.90054 0.539509 4.80516 0.609835 4.73484C0.680161 4.66451 0.775544 4.625 0.875 4.625H4.625V0.875C4.625 0.775544 4.66451 0.680161 4.73484 0.609835C4.80516 0.539509 4.90054 0.5 5 0.5C5.09946 0.5 5.19484 0.539509 5.26517 0.609835C5.33549 0.680161 5.375 0.775544 5.375 0.875V4.625H9.125C9.22446 4.625 9.31984 4.66451 9.39017 4.73484C9.46049 4.80516 9.5 4.90054 9.5 5Z"
-              fill="white"/>
-          </svg>
+          <PlusIcon/>
         </button>
       </div>
       {canReset && <button className={cl(styles.reset)} onClick={() => {

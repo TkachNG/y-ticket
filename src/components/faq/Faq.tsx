@@ -1,14 +1,23 @@
+'use client'
+
 import cl from 'classnames';
 import styles from './styles.module.css'
+import { FaqItem } from "@/components/faq/FaqItem";
 
-const questions = [
+export type Question = {
+  id: number,
+  question: string,
+  answer: string,
+}
+
+const questions: Question[] = [
   {
     id: 0,
     question: 'Что такое Билетопоиск?',
     answer: 'Мы — крупнейший сервис о кино в рунете. На нем вы сможете посмотреть фильмы и сериалы, купить билеты в кино, узнать рейтинги популярных видео и интересные факты, поставить фильмам оценки, написать рецензии и дополнить описание фильмов.'
   },
   {
-    is: 1,
+    id: 1,
     question: 'Какой компании принадлежит Билетопоиск?',
     answer: 'Мы — крупнейший сервис о кино в рунете. На нем вы сможете посмотреть фильмы и сериалы, купить билеты в кино, узнать рейтинги популярных видео и интересные факты, поставить фильмам оценки, написать рецензии и дополнить описание фильмов.'
   },
@@ -21,8 +30,7 @@ const questions = [
     id: 3,
     question: 'Как оставить отзыв на Билетопоиск?',
     answer: 'Мы — крупнейший сервис о кино в рунете. На нем вы сможете посмотреть фильмы и сериалы, купить билеты в кино, узнать рейтинги популярных видео и интересные факты, поставить фильмам оценки, написать рецензии и дополнить описание фильмов.'
-  },
-
+  }
 ];
 
 export const Faq = () => {
@@ -31,11 +39,7 @@ export const Faq = () => {
       <h2 className={cl(styles.title)}>Вопросы-ответы</h2>
       <div className={cl(styles.questions)}>
         {questions.map(question => {
-          return (<div className={cl(styles.item)} key={question.id}>
-              <p className={cl(styles.question)}>{question.question}</p>
-              <p className={cl(styles.answer)}>{question.answer}</p>
-            </div>
-          )
+          return (<FaqItem key={question.id} question={question}/>)
         })}
       </div>
     </div>

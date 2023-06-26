@@ -4,8 +4,6 @@ import cl from 'classnames';
 import Link from 'next/link';
 
 export const Footer: FunctionComponent = () => {
-  let count = 0;
-
   return (
     <footer className={cl(styles.footer)}>
       <div className={cl(styles.container)}>

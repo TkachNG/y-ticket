@@ -19,7 +19,11 @@ interface Props {
   className: string
 }
 
-const Avatar = ({ review }) => {
+interface AvatarProps {
+  review: Review
+}
+
+const Avatar = ({ review }: AvatarProps) => {
   return review.avatar !== undefined ?
     <Image src={review.avatar} alt={review.name} width={100} height={100}
            className={cl(styles.image)}/> :

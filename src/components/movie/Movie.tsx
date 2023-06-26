@@ -44,7 +44,9 @@ export const Movie: FunctionComponent<Props> = ({ movieId }) => {
   return (
     <>
       <div className={cl(styles.container)}>
-        <Image className={cl(styles.image)} src={data.posterUrl} alt={data.title} width={400} height={500}/>
+        <div className={cl(styles.imageContainer)}>
+          <Image className={cl(styles.image)} src={data.posterUrl} alt={data.title} width={400} height={500}/>
+        </div>
 
         <div>
           <div className={cl(styles.infoTop)}>

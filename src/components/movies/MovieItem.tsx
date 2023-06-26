@@ -18,13 +18,13 @@ interface Props {
 export const MovieItem: FunctionComponent<Props> = ({ movie, className, canReset }) => {
   return (
     <div className={cl(styles.container, className)}>
-      <Link href={`/movie/${movie.id}`} className={cl(styles.movieInfo)}>
-        <Image src={movie.posterUrl} alt={movie.title} width={300} height={450} className={cl(styles.image)}/>
+      <div className={cl(styles.movieInfo)}>
+        <Image src={movie.posterUrl} alt={movie.title} width={300} height={450} className={cl(styles.image)} loading={'lazy'}/>
         <div>
-          <p className={cl(styles.title)}>{movie.title}</p>
+          <Link href={`/movie/${movie.id}`} className={cl(styles.title)}>{movie.title}</Link>
           <p className={cl(styles.genre)}>{genreEnum[movie.genre] ?? movie.genre}</p>
         </div>
-      </Link>
+      </div>
 
       <CartItemAmount productId={movie.id} canReset={canReset}/>
     </div>

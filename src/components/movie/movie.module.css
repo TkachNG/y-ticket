@@ -1,9 +1,9 @@
 .container {
-  display: grid;
-  grid-column-gap: 2rem;
-  grid-template-columns: minmax(auto, 35%) auto;
+  display: flex;
+  gap: 2rem;
+  /*grid-template-columns: minmax(25%, 25rem) auto;*/
 
-  max-width: 120rem;
+  max-width: calc(120rem - 4rem);
   margin: 0 auto;
   background-color: var(--container-background);
   padding: 1.5rem;
@@ -13,14 +13,17 @@
   line-height: 1.5rem;
 }
 
-.image {
+.imageContainer {
   max-width: 25rem;
+  width: 100%;
+}
+
+.image {
   max-height: 31.25rem;
   border-radius: 8px;
   object-fit: cover;
   width: 100%;
   height: auto;
-
   aspect-ratio: 400 / 500;
 }
 
